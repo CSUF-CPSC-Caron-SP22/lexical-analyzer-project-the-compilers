@@ -1,0 +1,24 @@
+Token,Final State
+addOp,1
+assignOp,2
+char,3
+comma,4
+comparator,5
+floatLiteral,"6,21,20"
+incrOp,7
+identifier,8
+intLiteral,"9,22"
+leftBrace,10
+logicalNot,11
+leftParen,12
+multOp,"13,34"
+rightBrace,14
+rightParen,15
+semicolon,16
+string,17
+commentSingle,18
+commentMulti,19
+0x20 (space),35
+0x09 (tab),36
+0x0A (line feed),37
+0x0D (Carrige Return),38
