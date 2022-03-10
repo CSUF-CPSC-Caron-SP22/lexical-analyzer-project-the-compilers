@@ -1,6 +1,8 @@
-#include <iostream>
-
-int main() {
-    std::cout << "Hello World!";
-    return 0;
+//Declare the printf() function
+int printf(const char *format);
+  
+int main()
+{
+  printf( "Hello World" );
+  return 0;
 }
