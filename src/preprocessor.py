@@ -20,7 +20,7 @@ class Preprocessor:
     def __dFToDict(self,token_table_df) -> dict:
         token_table = {}
         for row in token_table_df.itertuples():
-                token_table[row[2]] = [row[1]]
+                token_table[row[1]] = [row[2]]
         return token_table
 
 

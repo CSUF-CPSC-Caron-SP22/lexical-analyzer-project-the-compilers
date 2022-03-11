@@ -1,24 +1,38 @@
-Token,Final State
-addOp,1
-assignOp,2
-char,3
-comma,4
-comparator,5
-floatLiteral,"6,21,20"
-incrOp,7
-identifier,8
-intLiteral,"9,22"
-leftBrace,10
-logicalNot,11
-leftParen,12
-multOp,"13,34"
-rightBrace,14
-rightParen,15
-semicolon,16
-string,17
-commentSingle,18
-commentMulti,19
-0x20 (space),35
-0x09 (tab),36
-0x0A (line feed),37
-0x0D (Carrige Return),38
+1,addOp
+2,assignOp
+3,char
+4,comma
+5,comparator
+6,floatLiteral
+7,incrOp
+8,identifier
+9,intLiteral
+10,leftBrace
+11,logicalNot
+12,leftParen
+13,multOp
+14,rightBrace
+15,rightParen
+16,semicolon
+17,string
+18,commentSingle
+19,commentMulti
+20,floatLiteral
+21,floatLiteral
+22,intLiteral
+23,
+24,
+25,
+26,
+27,
+28,
+29,
+30,
+31,
+32,
+33,
+34,multOp
+35,0x20 (space)
+36,0x09 (tab)
+37,0x0A (line feed)
+38,0x0D (Carrige Return)
