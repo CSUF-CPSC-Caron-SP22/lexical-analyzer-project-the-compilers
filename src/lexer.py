@@ -37,33 +37,38 @@ class LexicalAnalyzer:
         :return:
         """
 
-        lexical_array = [('', '')]
+        lexical_array = [('', '')]  # ("token_str","token_type")
+        current_position = 0
 
         for index in len(self.source_code):
-            current_position = 0
+
             token = ''
             token_type = ''
             next_row = 0
 
             current_character = self.source_code[index]
             token += current_character
-            next_row = self.scanning_table(current_character, current_position)
+            next_row = self.scanning_table(current_position, current_character)  # (row, col)
 
             while next_row != '':
-                current_position = next_row
                 index += 1
                 current_character = self.source_code[index]
-                next_row = self.scanning_table(current_character, current_position)
+                next_row = self.scanning_table(current_position, current_character)  # (row, col)
 
                 if next_row != '':
                     token += current_character
-                
+                    current_position = next_row
 
-                #ToDo error if token not found
 
-            token_type = self.token_table[current_position]
+                #ToDo error if token not found: Try/Catch might need to be reformatted
+            try:
+                token_type = self.token_table[current_position]
                 # if error token_type = "error: no valid token"
 
+            except:
+                token_type = "Error: invalid token"
+                print(f"Error for token: |> {token} <| : not a valid token")
+                
             if token_type == "identifier":
                 for item in self.reserved_words:
                     if token == item:
