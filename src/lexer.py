@@ -22,13 +22,17 @@ from typing import List
 
 class LexicalAnalyzer:
 
-    def __init__(self, file, reserved_words, scanning_table, token_table):
+    def __init__(self, reserved_words, scanning_table, token_table, file_name = ''):
         """"""
         preprocessor = Preprocessor.preprocessor
         token_table = Preprocessor.parse_token_table
         scanning_table = Preprocessor.parse_scanning_table
         reserved_words = Preprocessor.parse_reserved_words
         source_code = Preprocessor.parce_source_code
+        lexical_array = [('', '')]  # ("token_str","token_type")
+
+    def new_code(self, file_name):
+        pass
 
     def parse_file(self, code_list: list) -> List[tuple]:
         """
@@ -37,38 +41,46 @@ class LexicalAnalyzer:
         :return:
         """
 
-        lexical_array = [('', '')]  # ("token_str","token_type")
         current_position = 0
 
         for index in len(self.source_code):
 
             token = ''
-            token_type = ''
+            token_type = ""
             next_row = 0
 
             current_character = self.source_code[index]
             token += current_character
-            next_row = self.scanning_table(current_position, current_character)  # (row, col)
 
-            while next_row != '':
-                index += 1
-                current_character = self.source_code[index]
+            try:
                 next_row = self.scanning_table(current_position, current_character)  # (row, col)
 
-                if next_row != '':
-                    token += current_character
-                    current_position = next_row
+                while next_row != '':
+                    index += 1
+                    current_character = self.source_code[index]
+                    next_row = self.scanning_table(current_position, current_character)  # (row, col)
 
+                    if next_row != '':
+                        token += current_character
+                        current_position = next_row
+
+            except:
+                token_type = "Error: invalid token"
+                print(f"Error for token: |> {token} <| : not a valid token")
+                token += current_character
+                index += 1
 
                 #ToDo error if token not found: Try/Catch might need to be reformatted
             try:
                 token_type = self.token_table[current_position]
+                if token_table[current_position] == '':
+                    raise TypeError("Invalid token")
                 # if error token_type = "error: no valid token"
 
             except:
                 token_type = "Error: invalid token"
                 print(f"Error for token: |> {token} <| : not a valid token")
-                
+
             if token_type == "identifier":
                 for item in self.reserved_words:
                     if token == item:
@@ -76,9 +88,9 @@ class LexicalAnalyzer:
 
             #ToDo no_token_type error
 
-            lexical_array += (token, token_type)
+            self.lexical_array += (token, token_type)
 
-        return lexical_array
+        return self.lexical_array
 
 
 """
