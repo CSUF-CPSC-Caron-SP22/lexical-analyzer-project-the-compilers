@@ -16,7 +16,7 @@ function lexer()
  }
 '''
 
-import preprocessor.py as Preprocessor
+import preprocessor as Preprocessor
 from typing import List
 
 
