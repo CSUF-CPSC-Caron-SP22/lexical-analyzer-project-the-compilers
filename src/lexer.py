@@ -21,16 +21,15 @@ import pandas as pd
 from typing import List
 
 
-
 class LexicalAnalyzer:
 
     def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
         """"""
         self.preprocessor = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
-        self.token_table = ppr.token_table
-        self.scanning_table = ppr.scanning_table
-        self.reserved_words = ppr.reserved_words
-        self.source_code = ppr.source_code
+        self.token_table = self.preprocessor.token_table
+        self.scanning_table = self.preprocessor.scanning_table_df
+        self.reserved_words = self.preprocessor.reserved_words
+        self.source_code = self.preprocessor.source_code
         self.lexical_array = [('', '')]  # ("token_str","token_type")
 
     def parse_file(self, new_source : str = '') -> List[tuple]:
@@ -41,7 +40,7 @@ class LexicalAnalyzer:
         """
 
         if new_source == '':
-            set_source(new_source)
+            self.preprocessor.__fileToStr(new_source)
 
         current_position = 0
 
