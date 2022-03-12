@@ -17,34 +17,35 @@ function lexer()
 '''
 
 import preprocessor as ppr
-import pandas as pd
 from typing import List
+# import pandas as pd
+# import numpy as np
 
 
 class LexicalAnalyzer:
 
     def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
         """"""
-        self.preprocessor = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
-        self.token_table = self.preprocessor.token_table
-        self.scanning_table = self.preprocessor.scanning_table_df
-        self.reserved_words = self.preprocessor.reserved_words
-        self.source_code = self.preprocessor.source_code
+        self.PPR = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
+        self.token_table = self.PPR.token_table
+        self.scanning_table = self.PPR.scanning_table_df
+        self.reserved_words = self.PPR.reserved_words
+        self.source_code = self.PPR.source_code
         self.lexical_array = [('', '')]  # ("token_str","token_type")
 
-    def parse_file(self, new_source : str = '') -> List[tuple]:
+    def parse_file(self, new_source: str = '') -> List[tuple]:
         """
 
-        :param code_list:
+        :param new_source:
         :return:
         """
 
-        if new_source == '':
-            self.preprocessor.__fileToStr(new_source)
+        if new_source != '':
+            self.PPR.set_file(new_source)
 
         current_position = 0
 
-        for index in len(self.source_code):
+        for index in self.source_code:
 
             token = ''
             token_type = ""
@@ -54,12 +55,12 @@ class LexicalAnalyzer:
             token += current_character
 
             try:
-                next_row = self.scanning_table(current_position, current_character)  # (row, col)
+                next_row = self.scanning_table.loc[current_position, current_character]  # (row, col)
 
                 while next_row != '':
                     index += 1
                     current_character = self.source_code[index]
-                    next_row = self.scanning_table(current_position, current_character)  # (row, col)
+                    next_row = self.scanning_table.loc[current_position, current_character]  # (row, col)
 
                     if next_row != '':
                         token += current_character
@@ -102,3 +103,8 @@ char does not match any inputs
 
 
 """
+
+
+if __name__ == "__main__":
+
+    LA = LexicalAnalyzer()
