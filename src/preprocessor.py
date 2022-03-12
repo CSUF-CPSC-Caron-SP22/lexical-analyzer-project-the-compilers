@@ -5,6 +5,8 @@ class Preprocessor:
         self.token_table = self.__dFToDict(token_table_df)
         self.scanning_table_df = scanning_table_df
 
+    def set_file(self, file_name: str):
+        self.__fileToStr(file_name)
 
     def __fileToStr(self, source_code_file: str = "") -> str:
         """
@@ -12,7 +14,6 @@ class Preprocessor:
         :param source_code_file:
         :return:
         """
-
         if source_code_file != '':
             file = open(source_code_file, "r")
             return file.read()
