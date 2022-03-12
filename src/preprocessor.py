@@ -1,21 +1,23 @@
 class Preprocessor:
-    def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file):
+    def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
         self.source_code = self.__fileToStr(source_code_file)
         self.reserved_words = self.__dFToList(reserved_words_df)
         self.token_table = self.__dFToDict(token_table_df)
         self.scanning_table_df = scanning_table_df
 
 
-    def __fileToStr(self, source_code_file) -> str:
+    def __fileToStr(self, source_code_file: str = "") -> str:
         """
         This function takes in the source code and returns a string
         :param source_code_file:
         :return:
         """
-        file = open(source_code_file, "r")
-        self.source_code = file.read()
-        return self.source_code
 
+        if source_code_file != '':
+            file = open(source_code_file, "r")
+            return file.read()
+        else:
+            return ""
 
 
     def __dFToList(self, reserved_words_df) -> list:
@@ -42,7 +44,7 @@ class Preprocessor:
                 print(row[1], row[2])
             else:
                 token_table[row[1]] = [row[2]]
-        
+
         self.token_table = token_table
 
         return self.token_table
