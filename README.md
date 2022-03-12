@@ -6,6 +6,19 @@ lexical-analyzer-project-the-compilers created by GitHub Classroom
 
 ---
 
+### Description
+
+Created a table driven lexical analyzer for MiniC which uses a scanning table for the identification of tokens and to ignore comments which is written in Python.
+
+---
+
+### Installation and Usage
+
+    Clone: 'git clone https://github.com/CSUF-CPSC-Caron-SP22/lexical-analyzer-project-the-compilers.git'
+    Run: '$ make'
+
+---
+
 #### Robert Pace (rpaceiv@csu.fullerton.edu)
 
     main.py (Pair Programming)
@@ -26,16 +39,3 @@ lexical-analyzer-project-the-compilers created by GitHub Classroom
     preprocessor.py (Pair Programming)
     lever.py (Pair Programming)
     Tables
-
----
-
-### Description
-
-    - Created a table driven lexical analyzer for MiniC which uses a scanning table for the identification of tokens and to ignore comments which is written in Python.
-
----
-
-### Installation and Usage
-
-    - Clone the Repo: 'git clone https://github.com/CSUF-CPSC-Caron-SP22/lexical-analyzer-project-the-compilers.git'
-    - Run the program: '\$ make'
