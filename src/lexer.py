@@ -1,48 +1,105 @@
-class Preprocessor:
-    def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file):
-        self.source_code = self.__fileToStr(source_code_file)
-        self.reserved_words = self.__dFToList(reserved_words_df)
-        self.token_table = self.__dFToDict(token_table_df)
-        self.scanning_table_df = scanning_table_df
+'''
+
+function lexer()
+{
+     repeat
+           getchar();
+           If input char terminates a token
+               AND it is an accepting state then
+                   Isolate the token/lexeme
+                   decrement the  CP if necessary
+          else  lookup FSM (current state, input char);
+     until (token found) or (no more input)
+
+    If token found then
+          return(token)
+ }
+'''
+
+import preprocessor as ppr
+import pandas as pd
+from typing import List
 
 
-    def __fileToStr(self, source_code_file) -> str:
+
+class LexicalAnalyzer:
+
+    def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
+        """"""
+        self.preprocessor = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
+        self.token_table = ppr.token_table
+        self.scanning_table = ppr.scanning_table
+        self.reserved_words = ppr.reserved_words
+        self.source_code = ppr.source_code
+        self.lexical_array = [('', '')]  # ("token_str","token_type")
+
+    def parse_file(self, new_source : str = '') -> List[tuple]:
         """
-        This function takes in the source code and returns a string
-        :param source_code_file:
+
+        :param code_list:
         :return:
         """
-        file = open(source_code_file, "r")
-        self.source_code = file.read()
-        return self.source_code
+
+        if new_source == '':
+            set_source(new_source)
+
+        current_position = 0
+
+        for index in len(self.source_code):
+
+            token = ''
+            token_type = ""
+            next_row = 0
+
+            current_character = self.source_code[index]
+            token += current_character
+
+            try:
+                next_row = self.scanning_table(current_position, current_character)  # (row, col)
+
+                while next_row != '':
+                    index += 1
+                    current_character = self.source_code[index]
+                    next_row = self.scanning_table(current_position, current_character)  # (row, col)
+
+                    if next_row != '':
+                        token += current_character
+                        current_position = next_row
+
+            except:
+                token_type = "Error: invalid token"
+                print(f"Error for token: |> {token} <| : not a valid token")
+                token += current_character
+                index += 1
+
+                # ToDo error if token not found: Try/Catch might need to be reformatted
+            try:
+                token_type = self.token_table[current_position]
+                if self.token_table[current_position] == '':
+                    raise TypeError("Invalid token")
+                # if error token_type = "error: no valid token"
+
+            except:
+                token_type = "Error: invalid token"
+                print(f"Error for token: |> {token} <| : not a valid token")
+
+            if token_type == "identifier":
+                for item in self.reserved_words:
+                    if token == item:
+                        token_type = item
+
+            # ToDo no_token_type error
+
+            self.lexical_array += (token, token_type)
+
+        return self.lexical_array
 
 
+"""
+possible errors:
 
-    def __dFToList(self, reserved_words_df) -> list:
-        """
-        This function takes in a pandas data frame and returns a lis
-        :param reserved_words_df:
-        :return:
-        """
-        self.reserved_words = reserved_words_df[reserved_words_df.columns[0]].tolist()
-        return self.reserved_words
+char does not match any inputs
+    sets error as token type
 
 
-
-    def __dFToDict(self, token_table_df) -> dict:
-        """
-        This function takes in a pandas data frame and returns a dictonary
-        :param token_table_df:
-        :return:
-        """
-        token_table = {}
-        for row in token_table_df.itertuples():
-            if row[1] in token_table:
-                token_table[row[1]].append(row[2])
-                print(row[1], row[2])
-            else:
-                token_table[row[1]] = [row[2]]
-        
-        self.token_table = token_table
-
-        return self.token_table
+"""
