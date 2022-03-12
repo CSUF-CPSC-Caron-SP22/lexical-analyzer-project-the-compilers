@@ -23,19 +23,19 @@ Created a table driven lexical analyzer for MiniC which uses a scanning table fo
 
     main.py (Pair Programming)
     preprocessor.py (Pair Programming)
-    lever.py (Pair Programming)
+    lexer.py (Pair Programming)
     Tables
 
 #### Allen Rivas (allen.rrivas30@csu.fullerton.edu)
 
     main.py (Pair Programming)
     preprocessor.py (Pair Programming)
-    lever.py (Pair Programming)
+    lexer.py (Pair Programming)
     Tables
 
 #### Jacob Ursenbach (jlursenbach@csu.fullerton.edu)
 
     main.py (Pair Programming)
     preprocessor.py (Pair Programming)
-    lever.py (Pair Programming)
+    lexer.py (Pair Programming)
     Tables
