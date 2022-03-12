@@ -16,36 +16,36 @@ function lexer()
  }
 '''
 
-import preprocessor as Preprocessor
-import pandas as PD
+import preprocessor as ppr
 from typing import List
-
+import pandas as pd
+import numpy as np
 
 
 class LexicalAnalyzer:
 
     def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
         """"""
-        preprocessor = Preprocessor.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
-        self.token_table = Preprocessor.token_table
-        self.scanning_table = Preprocessor.scanning_table
-        self.reserved_words = Preprocessor.reserved_words
-        self.source_code = Preprocessor.source_code
+        self.PPR = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
+        self.token_table = self.PPR.token_table
+        self.scanning_table = self.PPR.scanning_table_df
+        self.reserved_words = self.PPR.reserved_words
+        self.source_code = self.PPR.source_code
         self.lexical_array = [('', '')]  # ("token_str","token_type")
 
-    def new_code(self, file_name):
-        pass
-
-    def parse_file(self, code_list: list) -> List[tuple]:
+    def parse_file(self, new_source: str = '') -> List[tuple]:
         """
 
-        :param code_list:
+        :param new_source:
         :return:
         """
 
+        # if new_source != '':
+        ##    self.PPR.set_file(new_source)
+
         current_position = 0
 
-        for index in len(self.source_code):
+        for index in range(len(self.source_code)):
 
             token = ''
             token_type = ""
@@ -54,34 +54,36 @@ class LexicalAnalyzer:
             current_character = self.source_code[index]
             token += current_character
 
-            try:
-                next_row = self.scanning_table(current_position, current_character)  # (row, col)
 
-                while next_row != '':
-                    index += 1
-                    current_character = self.source_code[index]
-                    next_row = self.scanning_table(current_position, current_character)  # (row, col)
+            #if current_character == '\n':
+            #    current_character = '\\n'
+            next_row = self.scanning_table[current_position, current_character]  # (row, col)
 
-                    if next_row != '':
-                        token += current_character
-                        current_position = next_row
-
-            except:
-                token_type = "Error: invalid token"
-                print(f"Error for token: |> {token} <| : not a valid token")
-                token += current_character
+            while next_row != '':
                 index += 1
+                current_character = self.source_code[index]
+                next_row = self.scanning_table.loc[current_position][current_character]  # (row, col)
+
+                if next_row != '':
+                    token += current_character
+                    current_position = next_row
+
+
+            # token_type = "Error: invalid token"
+            # print(f"Error for token: |> {token} <| : -----1------")
+
 
                 # ToDo error if token not found: Try/Catch might need to be reformatted
-            try:
+            # try:
+
                 token_type = self.token_table[current_position]
-                if self.token_table[current_position] == '':
-                    raise TypeError("Invalid token")
+            #    if self.token_table[current_position] == '':
+            #        raise TypeError("Invalid token")
                 # if error token_type = "error: no valid token"
 
-            except:
-                token_type = "Error: invalid token"
-                print(f"Error for token: |> {token} <| : not a valid token")
+            # except:
+            #   token_type = "Error: invalid token"
+            #   print(f"Error for token: |> {token} <| : -----2-----")
 
             if token_type == "identifier":
                 for item in self.reserved_words:
@@ -90,9 +92,10 @@ class LexicalAnalyzer:
 
             # ToDo no_token_type error
 
-            self.lexical_array += (token, token_type)
+            self.lexical_array.append((token, token_type))
 
         return self.lexical_array
+
 
 
 """
@@ -103,3 +106,8 @@ char does not match any inputs
 
 
 """
+
+
+if __name__ == "__main__":
+
+    LA = LexicalAnalyzer()
