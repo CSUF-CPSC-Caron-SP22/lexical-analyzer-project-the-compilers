@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
-import preprocessor
+# import preprocessor
+import lexer
 
 #argv 1 source code
 #argv 2 reserved_words
@@ -23,16 +24,18 @@ if __name__ == '__main__':
         print("ERROR")
         exit(0)
 
-    prePross = preprocessor.Preprocessor(source_code,reserved_df,token_df,scanning_df)
-    print(type(prePross.source_code))
-    print(type(prePross.reserved_words))
-    print(type(prePross.scanning_table_df))
-    print(type(prePross.token_table))
+    lex = lexer.LexicalAnalyzer(reserved_df,token_df,scanning_df,source_code)
 
-    print('\n\n',prePross.source_code)
-    print('\n\n',prePross.reserved_words)
-    print('\n\n',prePross.scanning_table_df.head())
-    print('\n\n',prePross.token_table)
+    print(lex.parse_file())
+    # print(type(LEX.source_code))
+    # print(type(LEX.reserved_words))
+    # print(type(LEX.scanning_table_df))
+    # print(type(LEX.token_table))
+
+    # print('\n\n',LEX.source_code)
+    # print('\n\n',LEX.reserved_words)
+    # print('\n\n',LEX.scanning_table_df.head())
+    # print('\n\n',LEX.token_table)
     
 
 
