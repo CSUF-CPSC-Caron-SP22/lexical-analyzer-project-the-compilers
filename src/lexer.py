@@ -40,9 +40,6 @@ class LexicalAnalyzer:
         :return:
         """
 
-        # if new_source != '':
-        ##    self.PPR.set_file(new_source)
-
         current_position = 0
         print(self.scanning_table['i'][0])
         print(f"token_table:{self.token_table}\n")
@@ -58,61 +55,74 @@ class LexicalAnalyzer:
 
             current_character = self.source_code[index]
 
-            """while current_character == "\n":
-                index += 1
-                current_character = self.source_code[index]"""
             if current_character == "\n":
                 current_character = "\\n"
                 token += "\n"
             else:
                 token += current_character
 
+            if current_character in list(self.scanning_table.columns.values):
 
-            try:
-
-                print(f"------ \n"
-                      f"     >Current position {current_position}\n"
-                      f"     >Current character {current_character}")
-                print(f"table found: {self.scanning_table[current_character][int(current_position)]}")
                 try:
-                    next_row = self.scanning_table[current_character][int(current_position)]  # (row, col)
-                except KeyError:
-                    print(f"error----------------1")
-                    next_row = "<x>"
 
-                print(f"next row:{next_row}")
-
-                while next_row != "<x>":
-                    current_position = next_row
-                    print(f"pos: {current_position}")
-                    index += 1
-                    current_character = self.source_code[index]
-                    print(f"char:{current_character}")
-                    print(f"next_row= {current_character},{current_position}")
+                    print(f"------ \n"
+                          f"     >Current position {current_position}\n"
+                          f"     >Current character {current_character}")
+                    print(f"table found: {self.scanning_table[current_character][int(current_position)]}")
                     try:
                         next_row = self.scanning_table[current_character][int(current_position)]  # (row, col)
                     except KeyError:
-                        print(f"error----------------2")
+                        print(f"error----------------1")
                         next_row = "<x>"
 
-                    if next_row != "<x>":
-                        print(f"next_row: {next_row}")
-                        token += current_character
+                    print(f"next row:{next_row}")
 
-                    print(f"end-loop------------------\n")
+                    while next_row != "<x>":
+                        current_position = next_row
+                        print(f"pos: {current_position}")
+                        index += 1
+                        current_character = self.source_code[index]
+                        print(f"char:{current_character}")
+                        print(f"next_row= {current_character},{current_position}")
 
-            except:
-                print(f"error----------------3")
-                token_type = "1 Error: invalid token"
-                print(f"Error for token: |> {token} <| : -----1------")
+                        """                        
+                        if (current_character not in list(self.scanning_table.columns.values))
+                            if current_position == 28  & (current_character != '*'):
+                                next_row = 28
+                            elif current_position == 18:
+                                next_row = 18
+                            elif current_position == 8:
+                                next_row = 8
+                            elif current_position == 8:
+                                next_row = 8
 
-                # ToDo error if token not found: Try/Catch might need to be reformatted
+                        else:"""
+
+                        try:
+                            next_row = self.scanning_table[current_character][int(current_position)]  # (row, col)
+                        except KeyError:
+                            print(f"KeyError----------------2")
+                            next_row = "<x>"
+
+                        if next_row != "<x>":
+                            print(f"next_row: {next_row}")
+                            token += current_character
+
+                        print(f"end-loop------------------\n")
+
+                except:
+                    print(f"error----------------3")
+                    token_type = "1 Error: invalid token"
+                    print(f"Error for token: |> {token} <| : -----1------")
+
+            else:
+                index += 1
+
             try:
                 print(f"TOKEN INPUT current_position: {current_position}")
                 token_type = self.token_table[int(current_position)][0]
                 if self.token_table[int(current_position)] == '<x>':
                     raise TypeError("Invalid token")
-                    # if error token_type = "error: no valid token"
 
             except:
                 print(f"error----------------4")
