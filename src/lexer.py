@@ -4,32 +4,34 @@ function lexer()
 {
      repeat
            getchar();
-           If input char terminates a token 
+           If input char terminates a token
                AND it is an accepting state then
                    Isolate the token/lexeme
                    decrement the  CP if necessary
           else  lookup FSM (current state, input char);
      until (token found) or (no more input)
-     
+
     If token found then
-          return(token)    
+          return(token)
  }
 '''
 
 import preprocessor as Preprocessor
+import pandas as PD
 from typing import List
+
 
 
 class LexicalAnalyzer:
 
-    def __init__(self, reserved_words, scanning_table, token_table, file_name = ''):
+    def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
         """"""
-        preprocessor = Preprocessor.preprocessor
-        token_table = Preprocessor.parse_token_table
-        scanning_table = Preprocessor.parse_scanning_table
-        reserved_words = Preprocessor.parse_reserved_words
-        source_code = Preprocessor.parce_source_code
-        lexical_array = [('', '')]  # ("token_str","token_type")
+        preprocessor = Preprocessor.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
+        self.token_table = Preprocessor.token_table
+        self.scanning_table = Preprocessor.scanning_table
+        self.reserved_words = Preprocessor.reserved_words
+        self.source_code = Preprocessor.source_code
+        self.lexical_array = [('', '')]  # ("token_str","token_type")
 
     def new_code(self, file_name):
         pass
@@ -70,10 +72,10 @@ class LexicalAnalyzer:
                 token += current_character
                 index += 1
 
-                #ToDo error if token not found: Try/Catch might need to be reformatted
+                # ToDo error if token not found: Try/Catch might need to be reformatted
             try:
                 token_type = self.token_table[current_position]
-                if token_table[current_position] == '':
+                if self.token_table[current_position] == '':
                     raise TypeError("Invalid token")
                 # if error token_type = "error: no valid token"
 
@@ -86,7 +88,7 @@ class LexicalAnalyzer:
                     if token == item:
                         token_type = item
 
-            #ToDo no_token_type error
+            # ToDo no_token_type error
 
             self.lexical_array += (token, token_type)
 
@@ -98,6 +100,6 @@ possible errors:
 
 char does not match any inputs
     sets error as token type
-    
-    
+
+
 """
