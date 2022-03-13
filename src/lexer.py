@@ -1,110 +1,121 @@
-'''
-
-function lexer()
-{
-     repeat
-           getchar();
-           If input char terminates a token
-               AND it is an accepting state then
-                   Isolate the token/lexeme
-                   decrement the  CP if necessary
-          else  lookup FSM (current state, input char);
-     until (token found) or (no more input)
-
-    If token found then
-          return(token)
- }
-'''
-
 import preprocessor as ppr
 from typing import List
-# import pandas as pd
-# import numpy as np
-
 
 class LexicalAnalyzer:
-
+    """
+    Class is responsible for performing a lexical analysis.
+    """
     def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
-        """"""
+        """
+        Constructer which sets the token_table, scanning_table, reserved_words, and source_code, imported from the preprocessor.
+        """
         self.PPR = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
         self.token_table = self.PPR.token_table
         self.scanning_table = self.PPR.scanning_table_df
         self.reserved_words = self.PPR.reserved_words
         self.source_code = self.PPR.source_code
-        self.lexical_array = [('', '')]  # ("token_str","token_type")
+        self.lexical_array = []  # ("token_str","token_type")
 
     def parse_file(self, new_source: str = '') -> List[tuple]:
         """
-
-        :param new_source:
-        :return:
+        The function is responsbile for choosing a token from the source code. Which, then it decides
+        if the current state and current character should reach the goal, or not. 
         """
 
-        if new_source != '':
-            self.PPR.set_file(new_source)
-
         current_position = 0
-
-        for index in self.source_code:
+        index = 0
+        line_counter = 1
+        while index < len(self.source_code):
 
             token = ''
             token_type = ""
-            next_row = 0
+            next_state = 0
 
             current_character = self.source_code[index]
-            token += current_character
 
-            try:
-                next_row = self.scanning_table.loc[current_position, current_character]  # (row, col)
-
-                while next_row != '':
-                    index += 1
-                    current_character = self.source_code[index]
-                    next_row = self.scanning_table.loc[current_position, current_character]  # (row, col)
-
-                    if next_row != '':
-                        token += current_character
-                        current_position = next_row
-
-            except:
-                token_type = "Error: invalid token"
-                print(f"Error for token: |> {token} <| : not a valid token")
+            if current_character == "\n":
+                line_counter += 1
+                current_character = "\\n"
+                token += "\n"
+            else:
                 token += current_character
+            # Check if the current character is in the columns names of the scanning table, else it is not a token.
+            if current_character in list(self.scanning_table.columns.values):
+
+                try:
+
+                    try:
+                        # next_state is the state of the token in scanning_table.
+                        next_state = self.scanning_table[current_character][int(current_position)]  # (row, col)
+                    except KeyError:
+                        next_state = "<x>"
+
+                    # If the next state is not empty then continue onto the next state.
+                    while next_state != "<x>":
+                        # if index ==  len(self.source_code)-1:
+                        #     break
+                        current_position = next_state
+
+                        index += 1
+                        current_character = self.source_code[index]
+
+                        if current_character == "\n":
+                            current_character = "\\n"
+                        if current_character == "\t":
+                            current_character = "\\t"                      
+                        if (current_character not in list(self.scanning_table.columns.values)):
+                            if int(current_position) == 28  and (current_character != '*'):
+                                next_state = 28
+                            elif int(current_position) == 18:
+                                next_state = 18
+                            elif int(current_position) == 32:
+                                next_state = 32
+                            else:
+                                next_state = "<x>"
+                        else:
+                            try:
+                                next_state = self.scanning_table[current_character][int(current_position)]  # (row, col)
+                            except KeyError:
+                                if current_character == "\n":
+                                    if int(current_position) == 28:
+                                        next_state = 28
+                                    else:
+                                        next_state = "<x>"
+
+                        if next_state != "<x>":
+                            token += current_character
+                            
+                except:
+                    token_type = "1 Error: invalid token"
+
+
+            else:
                 index += 1
 
-                # ToDo error if token not found: Try/Catch might need to be reformatted
             try:
-                token_type = self.token_table[current_position]
-                if self.token_table[current_position] == '':
+                token_type = self.token_table[int(current_position)][0]
+                if self.token_table[int(current_position)][0] == '<x>':
                     raise TypeError("Invalid token")
-                # if error token_type = "error: no valid token"
 
             except:
-                token_type = "Error: invalid token"
-                print(f"Error for token: |> {token} <| : not a valid token")
+                token_type = "Error: invalid token, found at line: " + str(line_counter)
 
+            # Checking if identifier is a reserved word.
             if token_type == "identifier":
                 for item in self.reserved_words:
                     if token == item:
                         token_type = item
 
             # ToDo no_token_type error
+            self.lexical_array.append((token_type,token))
+            current_position = 0
 
-            self.lexical_array += (token, token_type)
+        print("\nLexical analysis complete.",
+                "\n(Token,Token Lexeme)")
 
         return self.lexical_array
 
 
-"""
-possible errors:
+# if __name__ == "__main__":
 
-char does not match any inputs
-    sets error as token type
-
-
-"""
-
-
-if __name__ == "__main__":
-
-    LA = LexicalAnalyzer()
+#     LA = LexicalAnalyzer()
