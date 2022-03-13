@@ -1,13 +1,16 @@
 import preprocessor as ppr
 from typing import List
 
+
 class LexicalAnalyzer:
     """
     Class is responsible for performing a lexical analysis.
     """
-    def __init__(self, reserved_words_df, token_table_df, scanning_table_df,  source_code_file: str = ""):
+
+    def __init__(self, reserved_words_df, token_table_df, scanning_table_df, source_code_file: str = ""):
         """
-        Constructer which sets the token_table, scanning_table, reserved_words, and source_code, imported from the preprocessor.
+        Constructer which sets the token_table, scanning_table,
+        reserved_words, and source_code, imported from the preprocessor.
         """
         self.PPR = ppr.Preprocessor(reserved_words_df, token_table_df, scanning_table_df, source_code_file)
         self.token_table = self.PPR.token_table
@@ -33,10 +36,8 @@ class LexicalAnalyzer:
 
         # while iterating through source code
         while index < len(self.source_code):
-            
+
             token = ''
-            token_type = ""
-            next_state = 0
 
             # character being investigated
             current_character = self.source_code[index]
@@ -49,10 +50,10 @@ class LexicalAnalyzer:
             else:
                 # set token
                 token += current_character
-                
+
             # Check if the current character is in the columns names of the scanning table, else it is not a token.
             if current_character in list(self.scanning_table.columns.values):
-                
+
                 # if an error occurs, the token is invalid
                 try:
 
@@ -77,12 +78,12 @@ class LexicalAnalyzer:
                         if current_character == "\n":
                             current_character = "\\n"
                         if current_character == "\t":
-                            current_character = "\\t"                      
-                        
+                            current_character = "\\t"
+
                         # checks for unknown characters.
                         if current_character not in list(self.scanning_table.columns.values):
 
-                            if int(current_position) == 28  and (current_character != '*'):
+                            if int(current_position) == 28 and (current_character != '*'):
                                 # multiline comments take all characters but end with *
                                 next_state = 28
                             elif int(current_position) == 18:
@@ -136,14 +137,13 @@ class LexicalAnalyzer:
                         token_type = item
 
             # adds token to lexical_array[]
-            self.lexical_array.append((token_type,token))
+            self.lexical_array.append((token_type, token))
             current_position = 0
 
         print("\nLexical analysis complete.",
-                "\n(Token,Token Lexeme)")
+              "\n(Token,Token Lexeme)")
 
         return self.lexical_array
-
 
 # if __name__ == "__main__":
 
