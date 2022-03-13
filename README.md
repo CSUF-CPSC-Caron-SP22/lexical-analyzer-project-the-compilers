@@ -1,6 +1,6 @@
 # Lexical Analyzer Project
 
--- ALL EQUAL WORKED ON THIS --
+-- ALL EQUALLY WORKED ON THIS --
 
 ## The Compilers
 
@@ -36,7 +36,9 @@ Created a table driven lexical analyzer for MiniC which uses a scanning table fo
 ### Installation and Usage
 
     Clone: 'git clone https://github.com/CSUF-CPSC-Caron-SP22/lexical-analyzer-project-the-compilers.git'
-    Run: '$ make'
+    Run: from root dir '$ make' for default test.
+         from src dir '$python3 main.py <source_code.minic>' to test code with default table locations.
+         from src dir '$python3 main.py <source_code.minic> <reserved_words.csv> <scanning_table.csv> <token_table.csv>' to test code with custom table locations.
 
 ---
 

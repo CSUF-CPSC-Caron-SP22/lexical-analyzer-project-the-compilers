@@ -7,10 +7,6 @@ class Preprocessor:
         self.token_table = self.__dFToDict(token_table_df)
         self.scanning_table_df = scanning_table_df
 
-    def set_file(self, file_name: str):
-        self.__fileToStr(file_name)
-
-
     def __fileToStr(self, source_code_file: str = "") -> str:
         """
         This function takes in the source code and returns a string
