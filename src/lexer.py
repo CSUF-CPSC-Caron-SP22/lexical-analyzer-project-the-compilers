@@ -1,25 +1,5 @@
-'''
-
-function lexer()
-{
-     repeat
-           getchar();
-           If input char terminates a token
-               AND it is an accepting state then
-                   Isolate the token/lexeme
-                   decrement the  CP if necessary
-          else  lookup FSM (current state, input char);
-     until (token found) or (no more input)
-
-    If token found then
-          return(token)
- }
-'''
-
 import preprocessor as ppr
 from typing import List
-import pandas as pd
-import numpy as np
 
 class LexicalAnalyzer:
     """
@@ -43,10 +23,6 @@ class LexicalAnalyzer:
         """
 
         current_position = 0
-        print(self.scanning_table['i'][0])
-        print(f"token_table:{self.token_table}\n")
-
-        print(self.token_table[8])
         index = 0
         line_counter = 1
         while index < len(self.source_code):
@@ -68,28 +44,20 @@ class LexicalAnalyzer:
 
                 try:
 
-                    print(f"------ \n"
-                          f"     >Current position {current_position}\n"
-                          f"     >Current character {current_character}")
-                    print(f"table found: {self.scanning_table[current_character][int(current_position)]}")
                     try:
                         # next_state is the state of the token in scanning_table.
                         next_state = self.scanning_table[current_character][int(current_position)]  # (row, col)
                     except KeyError:
-                        print(f"error----------------1")
                         next_state = "<x>"
 
-                    print(f"next row:{next_state}")
                     # If the next state is not empty then continue onto the next state.
                     while next_state != "<x>":
                         # if index ==  len(self.source_code)-1:
                         #     break
                         current_position = next_state
-                        print(f"pos: {current_position}")
+
                         index += 1
                         current_character = self.source_code[index]
-                        print(f"char:{current_character}")
-                        print(f"next_state= {current_character},{current_position}")
 
                         if current_character == "\n":
                             current_character = "\\n"
@@ -108,7 +76,6 @@ class LexicalAnalyzer:
                             try:
                                 next_state = self.scanning_table[current_character][int(current_position)]  # (row, col)
                             except KeyError:
-                                print(f"KeyError----------------2")
                                 if current_character == "\n":
                                     if int(current_position) == 28:
                                         next_state = 28
@@ -116,29 +83,22 @@ class LexicalAnalyzer:
                                         next_state = "<x>"
 
                         if next_state != "<x>":
-                            print(f"next_state: {next_state}")
                             token += current_character
-
-                        print(f"end-loop------------------\n")
-
+                            
                 except:
-                    print(f"error----------------3")
                     token_type = "1 Error: invalid token"
-                    print(f"Error for token: |> {token} <| : -----1------")
+
 
             else:
                 index += 1
 
             try:
-                print(f"TOKEN INPUT current_position: {current_position}")
                 token_type = self.token_table[int(current_position)][0]
                 if self.token_table[int(current_position)][0] == '<x>':
                     raise TypeError("Invalid token")
 
             except:
-                print(f"error----------------4")
                 token_type = "Error: invalid token, found at line: " + str(line_counter)
-                print(f"Error for token: |> {token} <| : -----2-----")
 
             # Checking if identifier is a reserved word.
             if token_type == "identifier":
@@ -147,7 +107,6 @@ class LexicalAnalyzer:
                         token_type = item
 
             # ToDo no_token_type error
-            print(f"TOKEN:{token},TOKEN_TYPE:{token_type}\n")
             self.lexical_array.append((token_type,token))
             current_position = 0
 
@@ -155,19 +114,3 @@ class LexicalAnalyzer:
                 "\n(Token,Token Lexeme)")
 
         return self.lexical_array
-
-
-
-"""
-possible errors:
-
-char does not match any inputs
-    sets error as token type
-
-
-"""
-
-
-# if __name__ == "__main__":
-
-#     LA = LexicalAnalyzer()
