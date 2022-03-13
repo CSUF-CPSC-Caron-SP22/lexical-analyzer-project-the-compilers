@@ -1,3 +1,4 @@
+final state, token type
 1,addOp
 2,assignOp
 3,char
@@ -20,17 +21,17 @@
 20,floatLiteral
 21,floatLiteral
 22,intLiteral
-23,
-24,
-25,
-26,
-27,
-28,
-29,
-30,
-31,
-32,
-33,
+23,<x>
+24,<x>
+25,<x>
+26,<x>
+27,<x>
+28,<x>
+29,<x>
+30,<x>
+31,<x>
+32,<x>
+33,<x>
 34,multOp
 35,0x20 (space)
 36,0x09 (tab)

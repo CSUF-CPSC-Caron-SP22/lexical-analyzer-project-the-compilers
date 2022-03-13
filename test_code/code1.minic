@@ -1,10 +1,21 @@
 int main() {
-// This is a single line comment.
+
 float _id_a_t = 10.0E+4;
-float _id_b_t = 2.7;
+float _id_a_t = 2.7;
 float result = _id_a_t + _id_b_t;
 result*=3;
 print(result);
-/*    
-*/
+hey &
+int sum = 4+3
+
+math.sum(_id_a_t,_id_a_t);
+
+/* this is a \t multi 
+line comment */
+
+// This is & a \n single \r line comment.
+
+string a = "Hello I am a string.\n";
+
+
 }
